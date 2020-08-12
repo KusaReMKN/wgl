@@ -42,13 +42,7 @@ window.addEventListener('load', () => {
 	let colorVBO = CreateVBO(vertexColor);
 
 	// VBO をバインド、登録する
-	gl.bindBuffer(gl.ARRAY_BUFFER, positionVBO);
-	gl.enableVertexAttribArray(attrLocation[0]);
-	gl.vertexAttribPointer(attrLocation[0], attrStride[0], gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorVBO);
-	gl.enableVertexAttribArray(attrLocation[1]);
-	gl.vertexAttribPointer(attrLocation[1], attrStride[1], gl.FLOAT, false, 0, 0);
+	SetAttribute([positionVBO, colorVBO], attrLocation, attrStride);
 
 	let m = new matIV();
 
@@ -131,4 +125,13 @@ function CreateVBO(data) {
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);	// バッファにデータをセット
 	gl.bindBuffer(gl.ARRAY_BUFFER, null);	// バッファのバインドを無効化
 	return vbo;
+}
+
+// VBO バインド、登録
+function SetAttribute(vbo, attrL, attrS) {
+	for (let i in vbo) {
+		gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);	// バッファをバインド
+		gl.enableVertexAttribArray(attrL[i]);	// attributeLocation を有効化
+		gl.vertexAttribPointer(attrL[i], attrS[i], gl.FLOAT, false, 0, 0);	// attributeLocation 通知、登録
+	}
 }
